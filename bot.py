@@ -494,7 +494,7 @@ def admin_keyboard() -> InlineKeyboardMarkup:
     ]
     for text, callback_data, style, icon in buttons:
         builder.row(create_button(text, callback_data=callback_data, style=style, icon=icon))
-    builder.row(create_button("🏠 В меню", callback_data="main_menu", style="danger", icon="home"))
+    builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
     return builder.as_markup()
 
 
@@ -1525,10 +1525,9 @@ async def cb_country(callback: CallbackQuery):
         flag = COUNTRY_FLAGS.get(country, "")
         
         text = (
-            f'{emoji("check")} <b>✅ Аккаунт найден!</b>\n\n'
+            f'{emoji("check")} <b>Аккаунт найден!</b>\n\n'
             f'━━━━━━━━━━━━━━━━━━\n'
             f'{emoji("location")} <b>Страна:</b> {flag} {country}\n'
-            f'{emoji("tag")} <b>Номер:</b> <code>{account.phone}</code>\n'
             f'{emoji("money")} <b>Цена:</b> <code>{price:.0f}₽</code>\n'
             f'━━━━━━━━━━━━━━━━━━\n\n'
             f'{emoji("clock")} <i>Аккаунт верифицирован и готов к покупке</i>\n\n'
@@ -1608,7 +1607,7 @@ async def cb_pay_balance(callback: CallbackQuery):
                 
                 if account:
                     text = (
-                        f'{emoji("check")} <b>✅ Оплата успешна!</b>\n\n'
+                        f'{emoji("check")} <b>Оплата успешна!</b>\n\n'
                         f'{emoji("tag")} Номер: <code>{account.phone}</code>\n'
                         f'{emoji("money")} Списано с баланса: <b>{price:.0f}₽</b>\n'
                         f'{emoji("wallet")} Остаток на балансе: <b>{user.balance - price:.0f}₽</b>\n\n'
@@ -1628,7 +1627,7 @@ async def cb_pay_balance(callback: CallbackQuery):
             )
     else:
         text = (
-            f'{emoji("cross")} <b>❌ Недостаточно средств</b>\n\n'
+            f'{emoji("cross")} <b>Недостаточно средств</b>\n\n'
             f'{emoji("wallet")} Ваш баланс: <b>{user.balance:.0f}₽</b>\n'
             f'{emoji("money")} Необходимо: <b>{price:.0f}₽</b>\n'
             f'{emoji("info")} Не хватает: <b>{price - user.balance:.0f}₽</b>\n\n'
@@ -1743,7 +1742,7 @@ async def cb_pay_stars(callback: CallbackQuery):
         f'{emoji("star")} <b>Оплата Telegram Stars</b>\n\n'
         'Для покупки аккаунта через Telegram Stars\n'
         'напишите нашему менеджеру:\n\n'
-        f'{emoji("profile")} <b>@v3estnikov</b>\n\n'
+        f'{emoji("profile")} <b>@VestGameSupport</b>\n\n'
         '<i>В сообщении укажите:\n'
         '- Страну аккаунта\n'
         '- Количество аккаунтов</i>'
@@ -1913,7 +1912,7 @@ async def cb_get_code(callback: CallbackQuery):
         
         # Отправляем статус поиска
         status_msg = await callback.message.answer(
-            f'{emoji("loading")} <b>🔍 Ищем код подтверждения...</b>\n\n'
+            f'{emoji("loading")} <b>Ищем код подтверждения...</b>\n\n'
             f'{emoji("search")} Проверяю все диалоги аккаунта\n'
             f'{emoji("clock")} Это может занять до 15 секунд\n\n'
             '<i>Пожалуйста, подождите...</i>'
@@ -1926,13 +1925,13 @@ async def cb_get_code(callback: CallbackQuery):
         
         if code:
             builder = InlineKeyboardBuilder()
-            builder.row(create_button("🔄 Получить еще раз", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
-            builder.row(create_button("📁 Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
-            builder.row(create_button("📋 Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
-            builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+            builder.row(create_button("Получить еще раз", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
+            builder.row(create_button("Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
+            builder.row(create_button("Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
+            builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
             
             await callback.message.answer(
-                f'{emoji("check")} <b>✅ Код успешно получен!</b>\n\n'
+                f'{emoji("check")} <b>Код успешно получен!</b>\n\n'
                 f'{emoji("tag")} Номер телефона:\n<code>{account.phone}</code>\n\n'
                 f'{emoji("lock")} Код подтверждения:\n<code>{code}</code>\n\n'
                 f'{emoji("info")} <i>Код действителен ограниченное время</i>\n'
@@ -1941,13 +1940,13 @@ async def cb_get_code(callback: CallbackQuery):
             )
         else:
             builder = InlineKeyboardBuilder()
-            builder.row(create_button("🔄 Попробовать снова", callback_data=f"get_code_{purchase_id}", style="primary", icon="loading"))
-            builder.row(create_button("📁 Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
-            builder.row(create_button("📋 Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
-            builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+            builder.row(create_button("Попробовать снова", callback_data=f"get_code_{purchase_id}", style="primary", icon="loading"))
+            builder.row(create_button("Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
+            builder.row(create_button("Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
+            builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
             
             await callback.message.answer(
-                f'{emoji("cross")} <b>❌ Код не найден</b>\n\n'
+                f'{emoji("cross")} <b>Код не найден</b>\n\n'
                 f'{emoji("info")} Возможные причины:\n'
                 '• Код подтверждения еще не пришел\n'
                 '• Сессия временно не активна\n'
@@ -2004,9 +2003,9 @@ async def cb_get_session(callback: CallbackQuery):
         )
         
         builder = InlineKeyboardBuilder()
-        builder.row(create_button("📱 Получить код", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
-        builder.row(create_button("📋 Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
-        builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+        builder.row(create_button("Получить код", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
+        builder.row(create_button("Получить JSON", callback_data=f"get_json_{purchase_id}", style="default", icon="json"))
+        builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
         
         await callback.message.answer(
             f'{emoji("check")} <b>Файл .session отправлен!</b>\n\n'
@@ -2071,9 +2070,9 @@ async def cb_get_json(callback: CallbackQuery):
         )
         
         builder = InlineKeyboardBuilder()
-        builder.row(create_button("📱 Получить код", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
-        builder.row(create_button("📁 Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
-        builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+        builder.row(create_button("Получить код", callback_data=f"get_code_{purchase_id}", style="primary", icon="code"))
+        builder.row(create_button("Получить .session", callback_data=f"get_session_{purchase_id}", style="default", icon="file"))
+        builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
         
         await callback.message.answer(
             f'{emoji("check")} <b>JSON файл отправлен!</b>\n\n'
@@ -2101,7 +2100,7 @@ async def cb_my_purchases(callback: CallbackQuery):
         purchases = result.scalars().all()
         
         if purchases:
-            text = f'{emoji("box")} <b>📦 Ваши покупки</b>\n\n'
+            text = f'{emoji("box")} <b>Ваши покупки</b>\n\n'
             text += f'Всего покупок: <b>{len(purchases)}</b>\n\n'
             
             builder = InlineKeyboardBuilder()
@@ -2122,24 +2121,24 @@ async def cb_my_purchases(callback: CallbackQuery):
                 )
                 
                 builder.row(
-                    create_button("📱 Код", callback_data=f"get_code_{purchase.id}", style="primary", icon="code"),
-                    create_button("📁 .session", callback_data=f"get_session_{purchase.id}", style="default", icon="file"),
-                    create_button("📋 JSON", callback_data=f"get_json_{purchase.id}", style="default", icon="json")
+                    create_button("Код", callback_data=f"get_code_{purchase.id}", style="primary", icon="code"),
+                    create_button(".session", callback_data=f"get_session_{purchase.id}", style="default", icon="file"),
+                    create_button("JSON", callback_data=f"get_json_{purchase.id}", style="default", icon="json")
                 )
             
-            builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+            builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
             await send_media_message(callback, "my_purchases", text, builder.as_markup())
         else:
             text = (
-                f'{emoji("box")} <b>📦 Мои покупки</b>\n\n'
+                f'{emoji("box")} <b>Мои покупки</b>\n\n'
                 'У вас пока нет покупок.\n\n'
                 f'{emoji("buy")} <b>Купите свой первый аккаунт!</b>\n'
                 f'{emoji("location")} Доступны аккаунты из 6 стран'
             )
             
             builder = InlineKeyboardBuilder()
-            builder.row(create_button("🛒 Купить аккаунт", callback_data="buy_account", style="success", icon="buy"))
-            builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+            builder.row(create_button("Купить аккаунт", callback_data="buy_account", style="success", icon="buy"))
+            builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
             await send_media_message(callback, "my_purchases", text, builder.as_markup())
 
 
@@ -2183,7 +2182,7 @@ async def cb_profile(callback: CallbackQuery):
     days_ago = (datetime.utcnow() - user.created_at).days
     
     text = (
-        f'{emoji("profile")} <b>👤 Профиль пользователя</b>\n\n'
+        f'{emoji("profile")} <b>Профиль пользователя</b>\n\n'
         f'━━━━━━━━━━━━━━━━━━\n'
         f'{emoji("tag")} <b>ID:</b> <code>{user.telegram_id}</code>\n'
         f'{emoji("profile")} <b>Username:</b> @{user.username or "не указан"}\n'
@@ -2214,7 +2213,7 @@ async def cb_deposit_balance(callback: CallbackQuery):
     balance = user.balance if user else 0
     
     text = (
-        f'{emoji("wallet")} <b>💰 Пополнение баланса</b>\n\n'
+        f'{emoji("wallet")} <b>Пополнение баланса</b>\n\n'
         f'{emoji("wallet")} Текущий баланс: <b>{balance:.0f}₽</b>\n\n'
         f'━━━━━━━━━━━━━━━━━━\n\n'
         f'{emoji("sbp")} <b>СБП</b> — перевод по номеру телефона\n'
@@ -2237,7 +2236,7 @@ async def cb_deposit_sbp(callback: CallbackQuery):
     builder.row(create_button("Отмена", callback_data="deposit_balance", style="danger", icon="cross"))
     
     await callback.message.answer(
-        f'{emoji("sbp")} <b>💳 Пополнение через СБП</b>\n\n'
+        f'{emoji("sbp")} <b>Пополнение через СБП</b>\n\n'
         f'{emoji("money")} Введите сумму пополнения (от 10₽):\n\n'
         '<i>Отправьте число в чат</i>',
         reply_markup=builder.as_markup()
@@ -2257,7 +2256,7 @@ async def cb_deposit_crypto(callback: CallbackQuery):
     builder.row(create_button("Отмена", callback_data="deposit_balance", style="danger", icon="cross"))
     
     await callback.message.answer(
-        f'{emoji("crypto")} <b>🪙 Пополнение через Crypto Bot</b>\n\n'
+        f'{emoji("crypto")} <b>Пополнение через Crypto Bot</b>\n\n'
         f'{emoji("money")} Введите сумму пополнения (от 10₽):\n\n'
         '<i>Отправьте число в чат</i>',
         reply_markup=builder.as_markup()
@@ -2281,7 +2280,7 @@ async def cb_activate_promo(callback: CallbackQuery, state: FSMContext):
     builder.row(create_button("Отмена", callback_data="profile", style="danger", icon="cross"))
     
     await callback.message.answer(
-        f'{emoji("promo")} <b>🎟️ Активация промокода</b>\n\n'
+        f'{emoji("promo")} <b>Активация промокода</b>\n\n'
         f'{emoji("info")} Введите промокод для получения бонуса:\n\n'
         '<i>Отправьте код в чат</i>',
         reply_markup=builder.as_markup()
@@ -2304,7 +2303,7 @@ async def cb_sbp_paid(callback: CallbackQuery, state: FSMContext):
     builder.row(create_button("Отмена", callback_data="main_menu", style="danger", icon="cross"))
     
     await callback.message.answer(
-        f'{emoji("photo")} <b>📸 Отправьте скриншот оплаты</b>\n\n'
+        f'{emoji("photo")} <b>Отправьте скриншот оплаты</b>\n\n'
         'Сделайте скриншот перевода и отправьте его сюда.\n'
         'Администратор проверит платеж и зачислит средства.\n\n'
         f'{emoji("info")} <i>На скриншоте должно быть видно:\n'
@@ -2351,7 +2350,7 @@ async def cb_sbp_approve(callback: CallbackQuery):
                 # Обновляем сообщение админу
                 await callback.message.edit_caption(
                     f'{callback.message.caption}\n\n'
-                    f'{emoji("check")} <b>✅ ОДОБРЕНО</b>\n'
+                    f'{emoji("check")} <b>ОДОБРЕНО</b>\n'
                     f'💰 Баланс пользователя: <b>{old_balance:.0f}₽ → {new_balance:.0f}₽</b>',
                     reply_markup=None
                 )
@@ -2359,12 +2358,12 @@ async def cb_sbp_approve(callback: CallbackQuery):
                 # Уведомляем пользователя
                 try:
                     builder = InlineKeyboardBuilder()
-                    builder.row(create_button("🛒 Купить аккаунт", callback_data="buy_account", style="success", icon="buy"))
-                    builder.row(create_button("🏠 В меню", callback_data="main_menu", style="default", icon="home"))
+                    builder.row(create_button("Купить аккаунт", callback_data="buy_account", style="success", icon="buy"))
+                    builder.row(create_button("В меню", callback_data="main_menu", style="default", icon="home"))
                     
                     await bot.send_message(
                         user_id,
-                        f'{emoji("check")} <b>✅ Платеж одобрен!</b>\n\n'
+                        f'{emoji("check")} <b>Платеж одобрен!</b>\n\n'
                         f'{emoji("money")} Зачислено: <b>{payment.amount}₽</b>\n'
                         f'{emoji("wallet")} Ваш баланс: <b>{new_balance:.0f}₽</b>\n\n'
                         '<i>Средства зачислены на баланс бота</i>',
@@ -2398,16 +2397,16 @@ async def cb_sbp_reject(callback: CallbackQuery):
             
             await callback.message.edit_caption(
                 f'{callback.message.caption}\n\n'
-                f'{emoji("cross")} <b>❌ ОТКЛОНЕНО</b>',
+                f'{emoji("cross")} <b>ОТКЛОНЕНО</b>',
                 reply_markup=None
             )
             
             try:
                 await bot.send_message(
                     user_id,
-                    f'{emoji("cross")} <b>❌ Платеж отклонен</b>\n\n'
+                    f'{emoji("cross")} <b>Платеж отклонен</b>\n\n'
                     'К сожалению, ваш платеж не прошел проверку.\n'
-                    'Свяжитесь с поддержкой: <b>@v3estnikov</b>'
+                    'Свяжитесь с поддержкой: <b>@VestGameSupport</b>'
                 )
             except Exception as e:
                 logger.error(f"Failed to notify user {user_id}: {e}")
@@ -2448,7 +2447,7 @@ async def cb_admin_sbp_check(callback: CallbackQuery):
                             callback.from_user.id,
                             payment.screenshot_file_id,
                             caption=(
-                                f'{emoji("sbp")} <b>💳 СБП платеж</b>\n\n'
+                                f'{emoji("sbp")} <b>СБП платеж</b>\n\n'
                                 f'{emoji("profile")} ID пользователя: <code>{payment.user_id}</code>\n'
                                 f'Username: @{user.username or "нет"}\n'
                                 f'{emoji("money")} Сумма: <b>{payment.amount}₽</b>\n'
@@ -2566,7 +2565,7 @@ async def cb_admin(callback: CallbackQuery, state: FSMContext):
             )
             users = result.scalars().all()
             
-            text = f'{emoji("users")} <b>👥 Пользователи (последние 20)</b>\n\n'
+            text = f'{emoji("users")} <b>Пользователи (последние 20)</b>\n\n'
             for user in users:
                 admin_badge = " 👑" if user.is_admin else ""
                 text += (
@@ -2588,7 +2587,7 @@ async def cb_admin(callback: CallbackQuery, state: FSMContext):
             )
             accounts = result.scalars().all()
             
-            text = f'{emoji("box")} <b>📦 Аккаунты (последние 20)</b>\n\n'
+            text = f'{emoji("box")} <b>Аккаунты (последние 20)</b>\n\n'
             for account in accounts:
                 status = "✅" if account.is_verified else "⏳"
                 sold = "🔴 ПРОДАН" if account.is_sold else "🟢 в наличии"
