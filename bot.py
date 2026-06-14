@@ -373,8 +373,11 @@ def main_menu_keyboard() -> InlineKeyboardMarkup:
         create_button("Профиль", callback_data="profile", style="default", icon="profile"),
         create_button("Пополнить", callback_data="deposit_balance", style="success", icon="wallet")
     )
+    builder.row(
+        create_button("Поддержка", url="https://t.me/VestGameSupport", style="danger", icon="subscribe")
+    )
     return builder.as_markup()
-
+    
 
 async def countries_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура выбора страны с актуальными ценами"""
@@ -476,18 +479,18 @@ def admin_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура админ-панели"""
     builder = InlineKeyboardBuilder()
     buttons = [
-        ("📊 Статистика", "admin_stats", "primary", "stats"),
-        ("👥 Пользователи", "admin_users", "default", "users"),
-        ("📦 Аккаунты", "admin_accounts_list", "default", "box"),
-        ("📢 Рассылка", "admin_broadcast", "default", "broadcast"),
-        ("📱 Добавить аккаунт (код)", "admin_add_accounts", "success", "add"),
-        ("📁 Добавить .session", "admin_add_session", "success", "session"),
-        ("💰 Управление балансом", "admin_balance", "default", "edit"),
-        ("💵 Цены на аккаунты", "admin_prices", "default", "money"),
-        ("🎟️ Промокоды", "admin_promo_menu", "default", "promo"),
-        ("🖼️ Управление медиа", "admin_media_menu", "default", "media"),
-        ("📢 Обязательные каналы", "admin_channels_menu", "default", "channel"),
-        ("💳 Проверка СБП", "admin_sbp_check", "success", "sbp"),
+        ("Статистика", "admin_stats", "primary", "stats"),
+        ("Пользователи", "admin_users", "default", "users"),
+        ("Аккаунты", "admin_accounts_list", "default", "box"),
+        ("Рассылка", "admin_broadcast", "default", "broadcast"),
+        ("Добавить аккаунт (код)", "admin_add_accounts", "success", "add"),
+        ("Добавить .session", "admin_add_session", "success", "session"),
+        ("Управление балансом", "admin_balance", "default", "edit"),
+        ("Цены на аккаунты", "admin_prices", "default", "money"),
+        ("Промокоды", "admin_promo_menu", "default", "promo"),
+        ("Управление медиа", "admin_media_menu", "default", "media"),
+        ("Обязательные каналы", "admin_channels_menu", "default", "channel"),
+        ("Проверка СБП", "admin_sbp_check", "success", "sbp"),
     ]
     for text, callback_data, style, icon in buttons:
         builder.row(create_button(text, callback_data=callback_data, style=style, icon=icon))
