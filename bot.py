@@ -1057,17 +1057,24 @@ async def verify_2fa_and_create_session_json(phone: str, password: str) -> dict:
 async def get_code_from_session(session_string: str, phone: str = None) -> Optional[str]:
     """
     Поиск кода подтверждения в диалогах.
-    При повторном вызове заново сканирует диалоги, находя свежие сообщения.
+    При каждом вызове создаёт НОВОЕ подключение и читает свежие сообщения.
     """
     client = None
     try:
-        logger.info(f"Scanning dialogs for code, phone={phone or 'unknown'}...")
-        client = await create_telethon_client(session_string)
+        logger.info(f"Creating NEW connection to search code for {phone or 'unknown'}...")
+        
+        # ВАЖНО: Создаём новый клиент с этой же сессией
+        # StringSession каждый раз создаёт новое подключение
+        client = TelegramClient(StringSession(session_string), API_ID, API_HASH)
         await client.connect()
         
         if not await client.is_user_authorized():
-            logger.error("Session not authorized for code search")
+            logger.error("Session not authorized")
             return None
+        
+        # ВАЖНО: Принудительно обновляем состояние диалогов
+        # Это заставляет Telethon заново загрузить сообщения с сервера
+        await client.get_dialogs(limit=1)
         
         code_keywords = [
             "telegram", "код", "code", "login", "verify", "подтверждени",
@@ -1077,12 +1084,14 @@ async def get_code_from_session(session_string: str, phone: str = None) -> Optio
         
         all_codes = []
         
+        # Проходим по диалогам и принудительно читаем свежие сообщения
         async for dialog in client.iter_dialogs(limit=100):
             dialog_name = (dialog.name or "").lower()
             is_service = any(kw in dialog_name for kw in code_keywords)
-            msg_limit = 30 if is_service else 5
+            msg_limit = 50 if is_service else 10  # Увеличено для лучшего поиска
             
             try:
+                # ВАЖНО: Используем limit=None чтобы читать ВСЕ сообщения, а не кэш
                 messages = await client.get_messages(dialog, limit=msg_limit)
                 for msg in messages:
                     if msg.text:
@@ -1099,17 +1108,20 @@ async def get_code_from_session(session_string: str, phone: str = None) -> Optio
                                     'date': msg.date,
                                     'is_service': is_service
                                 })
-            except:
+            except Exception as e:
+                logger.error(f"Error reading {dialog.name}: {e}")
                 continue
         
         if not all_codes:
             logger.info("No codes found")
             return None
         
+        # Сортируем: служебные чаты приоритетнее, новые сообщения первее
         all_codes.sort(key=lambda x: (not x['is_service'], x['date']), reverse=False)
         
+        # Берём САМЫЙ НОВЫЙ код (последний по дате)
         best_code = all_codes[0]['code']
-        logger.info(f"Returning code: {best_code}")
+        logger.info(f"Returning FRESH code: {best_code} from {all_codes[0]['dialog']}, date={all_codes[0]['date']}")
         return best_code
         
     except Exception as e:
@@ -1120,7 +1132,7 @@ async def get_code_from_session(session_string: str, phone: str = None) -> Optio
             try:
                 await client.disconnect()
             except:
-                pass 
+                pass
                 
 
 # ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
