@@ -1053,13 +1053,11 @@ async def verify_2fa_and_create_session_json(phone: str, password: str) -> dict:
             'success': False,
             'error': str(e)
         }
-
-
- async def get_code_from_session(session_string: str, phone: str = None) -> Optional[str]:
+        
+async def get_code_from_session(session_string: str, phone: str = None) -> Optional[str]:
     """
     Поиск кода подтверждения в диалогах.
     При повторном вызове заново сканирует диалоги, находя свежие сообщения.
-    Сессия НЕ разлогинивается, новый код НЕ запрашивается — просто перечитывает чаты.
     """
     client = None
     try:
@@ -1101,16 +1099,13 @@ async def verify_2fa_and_create_session_json(phone: str, password: str) -> dict:
                                     'date': msg.date,
                                     'is_service': is_service
                                 })
-                                logger.info(f"Found code {code_str} in {dialog.name}, date={msg.date}")
-            except Exception as e:
-                logger.error(f"Error reading {dialog.name}: {e}")
+            except:
                 continue
         
         if not all_codes:
             logger.info("No codes found")
             return None
         
-        # Новые первее, служебные чаты приоритетнее
         all_codes.sort(key=lambda x: (not x['is_service'], x['date']), reverse=False)
         
         best_code = all_codes[0]['code']
@@ -1125,8 +1120,8 @@ async def verify_2fa_and_create_session_json(phone: str, password: str) -> dict:
             try:
                 await client.disconnect()
             except:
-                pass
-
+                pass 
+                
 
 # ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 
