@@ -66,12 +66,18 @@ LOW_ACCOUNTS_THRESHOLD = 3
 
 # Цены по умолчанию (6 стран)
 DEFAULT_PRICES = {
-    "США": 20.0,
-    "Россия": 15.0,
-    "Индия": 10.0,
-    "Германия": 18.0,
-    "Бразилия": 8.0,
-    "Индонезия": 9.0,
+    "США": 25.0,
+    "Россия": 150.0,
+    "Индия": 25.0,
+    "Германия": 65.0,
+    "Бразилия": 50.0,
+    "Индонезия": 30.0,
+    "Казахстан": 120.0,
+    "Украина": 130.0,
+    "Беларусь": 130.0,
+    "Вьетнам": 40.0,
+    "Филиппины": 30.0,
+    "Мьянма": 30.0,
 }
 
 # Коды стран для определения по номеру телефона
@@ -82,15 +88,26 @@ COUNTRY_CODES = {
     "49": "Германия",
     "55": "Бразилия",
     "62": "Индонезия",
+    "77": "Казахстан",  # +7 7xx
+    "380": "Украина",
+    "375": "Беларусь",
+    "84": "Вьетнам",
+    "63": "Филиппины",
+    "95": "Мьянма",
 }
 
 # Флаги стран
 COUNTRY_FLAGS = {
     "США": "🇺🇸", "Россия": "🇷🇺", "Индия": "🇮🇳",
     "Германия": "🇩🇪", "Бразилия": "🇧🇷", "Индонезия": "🇮🇩",
+    "Казахстан": "🇰🇿", "Украина": "🇺🇦", "Беларусь": "🇧🇾",
+    "Вьетнам": "🇻🇳", "Филиппины": "🇵🇭", "Мьянма": "🇲🇲",
 }
 
-COUNTRY_NAMES = ["США", "Россия", "Индия", "Германия", "Бразилия", "Индонезия"]
+COUNTRY_NAMES = [
+    "США", "Россия", "Индия", "Германия", "Бразилия", "Индонезия",
+    "Казахстан", "Украина", "Беларусь", "Вьетнам", "Филиппины", "Мьянма",
+]
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -384,7 +401,12 @@ async def countries_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     prices = await get_all_prices()
     
-    styles = ["primary", "primary", "primary", "default", "default", "default"]
+    # Стили для 12 стран
+    styles = [
+        "primary", "primary", "primary", "primary",
+        "default", "default", "default", "default",
+        "default", "default", "default", "default",
+    ]
     
     for i, country in enumerate(COUNTRY_NAMES):
         price = prices.get(country, DEFAULT_PRICES.get(country, 20))
@@ -634,9 +656,19 @@ async def require_subscription(callback: CallbackQuery) -> bool:
 def detect_country(phone: str) -> str:
     """Определяет страну по номеру телефона"""
     phone = phone.strip().lstrip('+')
+    
+    # Сначала проверяем Казахстан (+77...)
+    if phone.startswith("77"):
+        return "Казахстан"
+    # Потом Россию (+7...) — все остальные номера на +7
+    if phone.startswith("7"):
+        return "Россия"
+    
+    # Остальные страны по коду
     for code in sorted(COUNTRY_CODES.keys(), key=len, reverse=True):
         if phone.startswith(code):
             return COUNTRY_CODES[code]
+    
     return "США"
 
 
@@ -1413,7 +1445,7 @@ async def cmd_start(message: Message):
         f'{emoji("bot")} <b>Vest Account</b>\n\n'
         f'{emoji("lock")} Покупка аккаунтов Telegram\n'
         f'{emoji("loading")} Быстро, безопасно, анонимно\n'
-        f'{emoji("location")} 6 стран доступно\n\n'
+        f'{emoji("location")} 12 стран доступно\n\n'
         '<i>Выберите действие в меню ниже:</i>'
     )
     await send_media_message(message, "main_menu", welcome_text, main_menu_keyboard())
