@@ -1055,14 +1055,15 @@ async def verify_2fa_and_create_session_json(phone: str, password: str) -> dict:
         }
 
 
-async def get_code_from_session(session_string: str, phone: str = None) -> Optional[str]:
+ async def get_code_from_session(session_string: str, phone: str = None) -> Optional[str]:
     """
-    Улучшенный поиск кода подтверждения.
-    Ищет во всех диалогах сообщения с кодами подтверждения.
+    Поиск кода подтверждения в диалогах.
+    При повторном вызове заново сканирует диалоги, находя свежие сообщения.
+    Сессия НЕ разлогинивается, новый код НЕ запрашивается — просто перечитывает чаты.
     """
     client = None
     try:
-        logger.info(f"Starting code search for {phone or 'unknown'}...")
+        logger.info(f"Scanning dialogs for code, phone={phone or 'unknown'}...")
         client = await create_telethon_client(session_string)
         await client.connect()
         
@@ -1070,69 +1071,54 @@ async def get_code_from_session(session_string: str, phone: str = None) -> Optio
             logger.error("Session not authorized for code search")
             return None
         
-        # Ключевые слова для поиска чатов с кодами
         code_keywords = [
             "telegram", "код", "code", "login", "verify", "подтверждени",
             "авторизаци", "вход", "42777", "служебны", "service",
-            "верификаци", "verification", "security", "безопасность"
+            "верификаци", "verification"
         ]
         
         all_codes = []
         
-        # Проходим по всем диалогам (увеличено до 100 для лучшего поиска)
         async for dialog in client.iter_dialogs(limit=100):
             dialog_name = (dialog.name or "").lower()
-            
-            # Проверяем - служебный ли это чат
             is_service = any(kw in dialog_name for kw in code_keywords)
-            
-            # В служебных чатах смотрим больше сообщений
             msg_limit = 30 if is_service else 5
             
             try:
                 messages = await client.get_messages(dialog, limit=msg_limit)
                 for msg in messages:
                     if msg.text:
-                        # Ищем разные форматы кодов
-                        # 5 цифр подряд
                         codes_5 = re.findall(r'(?<!\d)\d{5}(?!\d)', msg.text)
-                        # Код в формате "Login code: 12345"
                         codes_login = re.findall(r'(?:login|code|код)\s*(?:code|код|:)?\s*(\d{5})', msg.text.lower())
-                        # Код в формате "12345 is your code"
                         codes_is = re.findall(r'(\d{5})\s*is\s*your', msg.text.lower())
                         
-                        all_found = codes_5 + codes_login + codes_is
-                        
-                        for code in all_found:
+                        for code in codes_5 + codes_login + codes_is:
                             code_str = str(code)
-                            # Проверяем что это похоже на код подтверждения (ровно 5 цифр)
                             if len(code_str) == 5 and code_str.isdigit():
                                 all_codes.append({
                                     'code': code_str,
                                     'dialog': dialog.name or 'Unknown',
                                     'date': msg.date,
-                                    'is_service': is_service,
-                                    'text_preview': msg.text[:100]
+                                    'is_service': is_service
                                 })
-                                logger.info(f"Found potential code: {code_str} in {dialog.name}")
+                                logger.info(f"Found code {code_str} in {dialog.name}, date={msg.date}")
             except Exception as e:
-                logger.error(f"Error reading messages from {dialog.name}: {e}")
+                logger.error(f"Error reading {dialog.name}: {e}")
                 continue
         
         if not all_codes:
-            logger.info("No codes found in any dialog")
+            logger.info("No codes found")
             return None
         
-        # Сортируем: сначала из служебных чатов, потом по дате (новые первые)
+        # Новые первее, служебные чаты приоритетнее
         all_codes.sort(key=lambda x: (not x['is_service'], x['date']), reverse=False)
         
-        best_code = all_codes[0]
-        logger.info(f"Best code found: {best_code['code']} in {best_code['dialog']} (service={best_code['is_service']})")
-        
-        return best_code['code']
+        best_code = all_codes[0]['code']
+        logger.info(f"Returning code: {best_code}")
+        return best_code
         
     except Exception as e:
-        logger.error(f"Error getting code from session: {e}")
+        logger.error(f"Code search error: {e}")
         return None
     finally:
         if client:
