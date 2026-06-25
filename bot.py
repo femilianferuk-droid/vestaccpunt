@@ -922,20 +922,20 @@ def admin_withdraw_keyboard(telegram_id: int, amount: float) -> InlineKeyboardMa
 def sell_start_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура старта продажи (выбор способа загрузки аккаунта)"""
     builder = InlineKeyboardBuilder()
-    builder.row(create_button("📁 Загрузить .session файл", callback_data="sell_session", style="primary", icon="session"))
-    builder.row(create_button("📱 Через код подтверждения", callback_data="sell_phone", style="default", icon="phone"))
-    builder.row(create_button("◀️ Назад", callback_data="main_menu", style="danger", icon="back"))
+    builder.row(create_button("Загрузить .session файл", callback_data="sell_session", style="primary", icon="session"))
+    builder.row(create_button("Через код подтверждения", callback_data="sell_phone", style="default", icon="phone"))
+    builder.row(create_button("Назад", callback_data="main_menu", style="danger", icon="back"))
     return builder.as_markup()
 
 
 def sell_confirm_keyboard() -> InlineKeyboardMarkup:
     """Подтверждение создания объявления"""
     builder = InlineKeyboardBuilder()
-    builder.row(create_button("✅ Опубликовать", callback_data="sell_publish", style="success", icon="check"))
-    builder.row(create_button("✏️ Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
-    builder.row(create_button("✏️ Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
-    builder.row(create_button("✏️ Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
-    builder.row(create_button("❌ Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
+    builder.row(create_button("Опубликовать", callback_data="sell_publish", style="success", icon="check"))
+    builder.row(create_button("Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
+    builder.row(create_button("Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
+    builder.row(create_button("Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
+    builder.row(create_button("Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
     return builder.as_markup()
 
 
@@ -969,12 +969,12 @@ def listings_keyboard(listings: list, page: int, has_next: bool, country: Option
     nav = []
     page_prefix = f"listings_page_{country}_" if country else "listings_page_"
     if page > 0:
-        nav.append(create_button("◀️ Назад", callback_data=f"{page_prefix}{page-1}", style="default", icon="prev"))
+        nav.append(create_button("Назад", callback_data=f"{page_prefix}{page-1}", style="default", icon="prev"))
     if has_next:
-        nav.append(create_button("Вперёд ▶️", callback_data=f"{page_prefix}{page+1}", style="default", icon="next"))
+        nav.append(create_button("Вперёд", callback_data=f"{page_prefix}{page+1}", style="default", icon="next"))
     if nav:
         builder.row(*nav)
-    builder.row(create_button("🌍 Сменить страну", callback_data="buy_account", style="default", icon="location"))
+    builder.row(create_button("Сменить страну", callback_data="buy_account", style="default", icon="location"))
     builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
     return builder.as_markup()
 
@@ -983,10 +983,10 @@ def listing_detail_keyboard(listing_id: int, is_owner: bool = False) -> InlineKe
     """Клавиатура детального просмотра объявления"""
     builder = InlineKeyboardBuilder()
     if not is_owner:
-        builder.row(create_button("🛒 КУПИТЬ", callback_data=f"listing_buy_{listing_id}", style="success", icon="buy"))
+        builder.row(create_button("КУПИТЬ", callback_data=f"listing_buy_{listing_id}", style="success", icon="buy"))
     else:
-        builder.row(create_button("📊 Моё объявление", callback_data=f"listing_manage_{listing_id}", style="default", icon="info"))
-    builder.row(create_button("◀️ К списку", callback_data="listings_page_0", style="default", icon="back"))
+        builder.row(create_button("Моё объявление", callback_data=f"listing_manage_{listing_id}", style="default", icon="info"))
+    builder.row(create_button("К списку", callback_data="listings_page_0", style="default", icon="back"))
     builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
     return builder.as_markup()
 
@@ -1005,7 +1005,7 @@ def my_listings_keyboard(listings: list) -> InlineKeyboardMarkup:
                 icon="box"
             )
         )
-    builder.row(create_button("➕ Новое объявление", callback_data="sell_account", style="success", icon="add"))
+    builder.row(create_button("Новое объявление", callback_data="sell_account", style="success", icon="add"))
     builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
     return builder.as_markup()
 
@@ -1014,8 +1014,8 @@ def my_listing_manage_keyboard(listing_id: int, status: str) -> InlineKeyboardMa
     """Управление конкретным своим объявлением"""
     builder = InlineKeyboardBuilder()
     if status == "active":
-        builder.row(create_button("❌ Снять с продажи", callback_data=f"my_listing_cancel_{listing_id}", style="danger", icon="cross"))
-    builder.row(create_button("◀️ К моим объявлениям", callback_data="my_sales", style="default", icon="back"))
+        builder.row(create_button("Снять с продажи", callback_data=f"my_listing_cancel_{listing_id}", style="danger", icon="cross"))
+    builder.row(create_button("К моим объявлениям", callback_data="my_sales", style="default", icon="back"))
     builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
     return builder.as_markup()
 
@@ -2091,7 +2091,7 @@ async def cmd_start(message: Message):
         f'{emoji("bot")} <b>Vest Account</b>\n\n'
         f'{emoji("lock")} Покупка аккаунтов Telegram\n'
         f'{emoji("loading")} Быстро, безопасно, анонимно\n'
-        f'{emoji("location")} 12 стран доступно\n\n'
+        f'{emoji("location")} 15+ стран доступно\n\n'
         '<i>Выберите действие в меню ниже:</i>'
     )
     await send_media_message(message, "main_menu", welcome_text, main_menu_keyboard())
@@ -2259,8 +2259,8 @@ async def show_listings_page(callback: CallbackQuery, page: int = 0, country: Op
         builder = InlineKeyboardBuilder()
         if country:
             builder.row(create_button("🌍 Все страны", callback_data="buy_country_all", style="primary", icon="market"))
-        builder.row(create_button("💼 Продать свой аккаунт", callback_data="sell_account", style="success", icon="sell"))
-        builder.row(create_button("◀️ К странам", callback_data="buy_account", style="default", icon="back"))
+        builder.row(create_button("Продать свой аккаунт", callback_data="sell_account", style="success", icon="sell"))
+        builder.row(create_button("К странам", callback_data="buy_account", style="default", icon="back"))
         builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
         await send_media_message(callback, "buy_account", text, builder.as_markup())
         return
@@ -2409,8 +2409,8 @@ async def cb_listing_buy(callback: CallbackQuery):
         if buyer.balance < listing.price:
             need = listing.price - buyer.balance
             builder = InlineKeyboardBuilder()
-            builder.row(create_button("💰 Пополнить баланс", callback_data="deposit_balance", style="success", icon="wallet"))
-            builder.row(create_button("◀️ К объявлениям", callback_data="listings_page_0", style="default", icon="back"))
+            builder.row(create_button("Пополнить баланс", callback_data="deposit_balance", style="success", icon="wallet"))
+            builder.row(create_button("К объявлениям", callback_data="listings_page_0", style="default", icon="back"))
             await callback.message.answer(
                 f'{emoji("cross")} <b>Недостаточно средств</b>\n\n'
                 f'{emoji("wallet")} Баланс: <b>{buyer.balance:.0f}₽</b>\n'
@@ -2519,11 +2519,11 @@ def review_rating_keyboard(purchase_id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     # Каждая кнопка отдельным вызовом builder.row(...) — это столбик.
     star_ratings = [
-        ("⭐", 1, "danger"),
-        ("⭐⭐", 2, "danger"),
-        ("⭐⭐⭐", 3, "default"),
-        ("⭐⭐⭐⭐", 4, "success"),
-        ("⭐⭐⭐⭐⭐", 5, "success"),
+        ("1 звезда", 1, "danger"),
+        ("2 звезды", 2, "danger"),
+        ("3 звезды", 3, "default"),
+        ("4 звезды", 4, "success"),
+        ("5 звезд", 5, "success"),
     ]
     for label, rating, style in star_ratings:
         builder.row(
@@ -2534,7 +2534,7 @@ def review_rating_keyboard(purchase_id: int) -> InlineKeyboardMarkup:
                 icon="star",
             )
         )
-    builder.row(create_button("◀️ Отмена", callback_data=f"my_purchases", style="default", icon="back"))
+    builder.row(create_button("Отмена", callback_data=f"my_purchases", style="default", icon="back"))
     return builder.as_markup()
 
 
@@ -2601,8 +2601,8 @@ async def cb_review_rate(callback: CallbackQuery, state: FSMContext):
     await state.set_state(ReviewStates.waiting_for_comment)
 
     builder = InlineKeyboardBuilder()
-    builder.row(create_button("⏭ Пропустить", callback_data=f"review_skip_{purchase_id}", style="default", icon="back"))
-    builder.row(create_button("◀️ Отмена", callback_data=f"my_purchases", style="danger", icon="cross"))
+    builder.row(create_button("Пропустить", callback_data=f"review_skip_{purchase_id}", style="default", icon="back"))
+    builder.row(create_button("Отмена", callback_data=f"my_purchases", style="danger", icon="cross"))
 
     stars = "⭐" * rating
     await callback.message.answer(
@@ -2746,7 +2746,7 @@ async def cb_review_rate_fallback(callback: CallbackQuery, state: FSMContext):
 
 def admin_rating_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.row(create_button("◀️ Назад", callback_data="admin", style="danger", icon="back"))
+    builder.row(create_button("Назад", callback_data="admin", style="danger", icon="back"))
     return builder.as_markup()
 
 
@@ -2780,7 +2780,7 @@ async def admin_user_list_keyboard(page: int = 0) -> InlineKeyboardMarkup:
         nav.append(create_button("▶️", callback_data=f"admin_users_page_{page+1}", style="default", icon="back"))
     if nav:
         builder.row(*nav)
-    builder.row(create_button("◀️ Назад", callback_data="admin", style="danger", icon="back"))
+    builder.row(create_button("Назад", callback_data="admin", style="danger", icon="back"))
     return builder.as_markup()
 
 
@@ -2833,7 +2833,7 @@ async def cb_admin_set_rating(callback: CallbackQuery, state: FSMContext):
     await state.update_data(rating_target_id=target_id, rating_target_username=username)
 
     builder = InlineKeyboardBuilder()
-    builder.row(create_button("◀️ Отмена", callback_data="admin_rating", style="danger", icon="cross"))
+    builder.row(create_button("Отмена", callback_data="admin_rating", style="danger", icon="cross"))
 
     await callback.message.answer(
         f'{emoji("star")} <b>Изменить рейтинг пользователя</b>\n\n'
@@ -3147,22 +3147,22 @@ async def cb_sell_origin(callback: CallbackQuery, state: FSMContext):
     if sell_mode == "phone":
         text += f'{emoji("phone")} <b>Сейчас нужно будет пройти вход через код Telegram.</b>'
         builder = InlineKeyboardBuilder()
-        builder.row(create_button("📱 Ввести номер", callback_data="sell_phone_enter", style="primary", icon="phone"))
-        builder.row(create_button("✏️ Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить происхождение", callback_data="sell_edit_origin", style="default", icon="edit"))
-        builder.row(create_button("❌ Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
+        builder.row(create_button("Ввести номер", callback_data="sell_phone_enter", style="primary", icon="phone"))
+        builder.row(create_button("Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
+        builder.row(create_button("Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
+        builder.row(create_button("Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
+        builder.row(create_button("Изменить происхождение", callback_data="sell_edit_origin", style="default", icon="edit"))
+        builder.row(create_button("Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
         await callback.message.answer(text, reply_markup=builder.as_markup())
     else:
         text += f'{emoji("session")} <b>Сейчас нужно отправить .session файл аккаунта.</b>'
         builder = InlineKeyboardBuilder()
-        builder.row(create_button("📁 Отправить .session", callback_data="sell_send_session", style="primary", icon="session"))
-        builder.row(create_button("✏️ Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
-        builder.row(create_button("✏️ Изменить происхождение", callback_data="sell_edit_origin", style="default", icon="edit"))
-        builder.row(create_button("❌ Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
+        builder.row(create_button("Отправить .session", callback_data="sell_send_session", style="primary", icon="session"))
+        builder.row(create_button("Изменить название", callback_data="sell_edit_title", style="default", icon="edit"))
+        builder.row(create_button("Изменить описание", callback_data="sell_edit_description", style="default", icon="edit"))
+        builder.row(create_button("Изменить цену", callback_data="sell_edit_price", style="default", icon="edit"))
+        builder.row(create_button("Изменить происхождение", callback_data="sell_edit_origin", style="default", icon="edit"))
+        builder.row(create_button("Отменить", callback_data="sell_cancel", style="danger", icon="cross"))
         await callback.message.answer(text, reply_markup=builder.as_markup())
 
 
@@ -3344,7 +3344,7 @@ async def h_sell_session_file(message: Message, state: FSMContext):
         f'{emoji("hold")} <i>Деньги попадут в холд на {HOLD_PERIOD_HOURS} ч. после продажи.</i>\n\n'
         f'{emoji("market")} <i>Объявление #{listing.id} уже в маркетплейсе.</i>',
         reply_markup=InlineKeyboardBuilder().row(
-            create_button("📦 Мои продажи", callback_data="my_sales", style="primary", icon="market")
+            create_button("Мои продажи", callback_data="my_sales", style="primary", icon="market")
         ).row(
             create_button("В меню", callback_data="main_menu", style="danger", icon="home")
         ).as_markup()
@@ -3574,7 +3574,7 @@ async def _publish_listing_from_session(message: Message, state: FSMContext, res
         f'{emoji("hold")} <i>Деньги в холде {HOLD_PERIOD_HOURS} ч. после продажи.</i>\n\n'
         f'{emoji("market")} <i>Объявление #{listing.id} в маркетплейсе.</i>',
         reply_markup=InlineKeyboardBuilder().row(
-            create_button("📦 Мои продажи", callback_data="my_sales", style="primary", icon="market")
+            create_button("Мои продажи", callback_data="my_sales", style="primary", icon="market")
         ).row(
             create_button("В меню", callback_data="main_menu", style="danger", icon="home")
         ).as_markup()
@@ -3615,7 +3615,7 @@ async def cb_my_sales(callback: CallbackQuery):
     if not listings:
         text += f'{emoji("info")} <i>У вас пока нет объявлений.</i>'
         builder = InlineKeyboardBuilder()
-        builder.row(create_button("💼 Новое объявление", callback_data="sell_account", style="success", icon="add"))
+        builder.row(create_button("Новое объявление", callback_data="sell_account", style="success", icon="add"))
         builder.row(create_button("В меню", callback_data="main_menu", style="danger", icon="home"))
         await callback.message.answer(text, reply_markup=builder.as_markup())
         return
