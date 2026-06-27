@@ -71,8 +71,8 @@ ADMIN_IDS = [7973988177]
 
 # Ссылка на Mini App (vestaccsminiapp / app.py).
 # Должна быть HTTPS, Telegram Mini Apps не открывают http.
-# Прописывается в .env: MINIAPP_URL=https://your-domain.com
-MINIAPP_URL = os.getenv("MINIAPP_URL", "https://vestaccmini.example.com")
+# Прописывается в .env: MINIAPP_URL=https://vestaccsminiapp.vercel.app/
+MINIAPP_URL = os.getenv("MINIAPP_URL", "https://vestaccsminiapp.vercel.app/")
 
 # ===== ЧАСОВОЙ ПОЯС =====
 # Все временные метки в боте используются по Москве (UTC+3, MSK).
